@@ -1,159 +1,129 @@
-<div align="center">
+# SpaceScout
 
-# 🔭 SpaceScout
+**Disk space analyzer for Windows 10 and 11.** SpaceScout identifies the files and folders consuming
+storage on any drive and lets you remove them directly from the results.
 
-### Find what's eating your disk space on Windows in seconds, then delete it.
+[![Build](https://github.com/tamersherif00/SpaceScout/actions/workflows/build.yml/badge.svg)](https://github.com/tamersherif00/SpaceScout/actions/workflows/build.yml)
+[![Release](https://img.shields.io/github/v/release/tamersherif00/SpaceScout)](https://github.com/tamersherif00/SpaceScout/releases/latest)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-lightgrey)
 
-**A fast, free, open-source disk space analyzer for Windows 10 & 11.**
-Scans every core in parallel, shows your biggest folders and files as a drill-down tree,
-and lets you clean them up in one click. Single 4 MB `.exe`. No installer, no ads, no telemetry.
+![SpaceScout folder tree view](docs/tree.png)
 
-[![Download](https://img.shields.io/github/v/release/tamersherif00/SpaceScout?label=Download&style=for-the-badge&color=2ea44f)](https://github.com/tamersherif00/SpaceScout/releases/latest)
-[![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?style=for-the-badge&logo=windows)](https://github.com/tamersherif00/SpaceScout/releases/latest)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
-[![Built with Rust](https://img.shields.io/badge/Built%20with-Rust-orange?style=for-the-badge&logo=rust)](https://www.rust-lang.org/)
+## Overview
 
-**[⬇ Download spacescout.exe](https://github.com/tamersherif00/SpaceScout/releases/latest/download/spacescout.exe)** · [Features](#-features) · [How to use](#-how-to-use) · [FAQ](#-faq) · [Build from source](#-build-from-source)
+When a Windows drive runs low on space, File Explorer offers no direct way to see which folders
+are responsible. SpaceScout scans a drive or folder in parallel across all CPU cores, aggregates
+sizes up the directory hierarchy, and presents the result as a size-ordered tree together with
+ranked lists of the largest files and folders.
 
-<img src="docs/tree.png" alt="SpaceScout disk space analyzer showing a folder tree sorted by size with colored hierarchy lines" width="900">
+SpaceScout is distributed as a single portable executable of approximately 4 MB. It requires no
+installation, runtime, administrator rights, background service, or network access.
 
-</div>
+It is intended as a lightweight, open-source alternative to tools such as WinDirStat, WizTree,
+TreeSize and SpaceSniffer.
 
----
+## Key capabilities
 
-## 😩 The problem
-
-Windows says **"Low disk space"**, and you have no idea why. Explorer won't show folder sizes,
-and clicking through hundreds of folders one *Properties* dialog at a time takes forever.
-
-**SpaceScout answers "what is using my disk space?" right away:**
-
-1. Click your drive.
-2. See every folder and file **sorted by size, biggest first**.
-3. Drill down, tick what you don't need, and **send it to the Recycle Bin**.
-
-That's it. Space reclaimed.
-
-## ⚡ Features
-
-| | |
+| Capability | Description |
 |---|---|
-| 🚀 **Fast multi-threaded scan** | Scans folders in parallel on every CPU core. A real 460 GB system drive with **4.3 million files** scans in **~20 seconds** (warm cache, ~70 s cold) on the author's PC. Small folders finish instantly. |
-| 🌳 **Drill-down folder tree** | Everything sorted biggest-first, with colour-coded hierarchy lines so you always know where you are. Each row shows size, **% of its parent folder**, and file count. |
-| 🏆 **Largest files & largest folders** | Top 1,000 biggest files and folders across the whole drive in one list. Forgotten ISOs, VM disks, game caches, old backups and `node_modules` jump right out. |
-| 🗑️ **Delete right from the results** | Tick files or folders, then choose **Move to Recycle Bin** (undoable) or **Delete permanently**. Sizes update instantly, with no rescan. |
-| 🛡️ **Safety built in** | Confirmation dialog listing exactly what will be removed, a clear warning for Windows / Program Files / system files, and the scan root can never be deleted. |
-| 💾 **All your drives at a glance** | Every drive with free/total space and a fill bar that turns **orange** above 75% and **red** above 90%. |
-| 🪶 **Lightweight & portable** | One ~4 MB executable. No installer, no runtime, no admin required, no background service, nothing written to the registry. |
-| 🖱️ **Right-click tools** | Show in Explorer, open folder, copy path, or rescan just one folder. |
-| 🔒 **Private** | 100% offline. No accounts, no tracking, no network access. Open source, so you can verify it. |
+| Parallel scanning | Work-stealing directory traversal across all available cores. A 460 GB system drive containing 4.3 million files is scanned in approximately 20 seconds with a warm file-system cache (approximately 70 seconds cold) on the reference machine. |
+| Hierarchical tree view | Folders and files sorted by size, with hierarchy guide lines, size, percentage of parent and file count for every entry. The largest path is expanded automatically after each scan. |
+| Ranked lists | The 1,000 largest files and 1,000 largest folders across the scanned location, each linked back to its position in the tree. |
+| In-place deletion | Selected items can be moved to the Recycle Bin or deleted permanently. Totals are updated immediately without rescanning. |
+| Safeguards | Confirmation listing every item and the total size; explicit warning when Windows, Program Files or other system paths are selected; the scan root cannot be deleted. |
+| Drive overview | All mounted drives with free and total capacity, highlighted above 75% and 90% utilisation. |
+| Explorer integration | Context menu actions to show in Explorer, open a folder, copy a path, or rescan a single folder. |
+| Privacy | Fully offline. No accounts, telemetry or network calls. |
 
-<div align="center">
-<img src="docs/largest-files.png" alt="SpaceScout largest files view listing the biggest files on the drive with sizes" width="900">
-<br><sub><i>Largest files view: the biggest space hogs across the whole drive, in one list.</i></sub>
-</div>
+![SpaceScout largest files view](docs/largest-files.png)
 
-## 📥 Download & run
+## Installation
 
-1. Download **[spacescout.exe](https://github.com/tamersherif00/SpaceScout/releases/latest/download/spacescout.exe)** from the [latest release](https://github.com/tamersherif00/SpaceScout/releases/latest).
-2. Double-click it. No installation needed.
+1. Download `spacescout.exe` from the [latest release](https://github.com/tamersherif00/SpaceScout/releases/latest).
+2. Run the executable. No installation step is required.
 
-> **Windows SmartScreen** may say *"Windows protected your PC"* because the app isn't code-signed yet.
-> Click **More info → Run anyway**. The full source is here if you'd rather [build it yourself](#-build-from-source).
+Release binaries are not yet code-signed. Windows SmartScreen may therefore display a warning on
+first launch; select **More info**, then **Run anyway**. Alternatively, build from source as
+described below.
 
-## 🧭 How to use
+## Usage
 
-1. **Pick a drive** at the top (or type/browse to any folder) and the scan starts.
-2. The tree opens on the **biggest path automatically**. Expand any folder with the ▸ arrow or a double-click.
-3. Switch to **Largest files** or **Largest folders** for a flat top-1000 view. Double-click an entry to jump to it in the tree.
-4. **Tick** what you want gone, then press **Move to Recycle Bin** or **Delete permanently**.
-5. **Right-click** anything for *Show in Explorer*, *Copy path*, or *Scan only this folder*.
+1. Select a drive from the drive bar, or enter or browse to a folder, and choose **Scan**.
+2. Expand folders using the arrow or by double-clicking. Each row shows size, share of the parent
+   folder and the number of files contained.
+3. Use the **Largest files** and **Largest folders** tabs for a ranked view across the whole scan.
+   Double-click an entry to locate it in the tree.
+4. Select items with the checkboxes and choose **Move to Recycle Bin** or **Delete permanently**.
+5. Right-click any entry for Explorer and path actions.
 
-**Tip:** Run as administrator to include folders your account can't read (other user profiles,
-`System Volume Information`). SpaceScout tells you how many folders it couldn't access.
+Run SpaceScout as administrator to include locations that the current account cannot read, such
+as other user profiles. The number of inaccessible folders is reported after each scan.
 
-## 🔍 What usually eats disk space (and what's safe to remove)
+### Command line
 
-SpaceScout makes these obvious. Here's what they are:
+```
+spacescout.exe [PATH]            Open and immediately scan PATH
+spacescout.exe --bench [PATH]    Scan without a window and print totals, duration and largest files
+```
 
-| Usually huge | What it is | Safe to delete? |
+## Common sources of disk usage
+
+| Location | Description | Recommended action |
 |---|---|---|
-| `pagefile.sys`, `hiberfil.sys` | Windows virtual memory / hibernation | **Don't delete.** Shrink pagefile in *System → Advanced → Performance*, or run `powercfg /h off` to remove hibernation. |
-| `*.vhdx` (WSL, Docker, Hyper-V, Android emulator) | Virtual machine disks | Only via the owning tool (e.g. `wsl --unregister`, Docker *Clean / Purge data*). |
-| `Downloads\*.iso, *.zip, *.exe` | Old installers & archives | ✅ Usually yes. |
-| `node_modules`, `target`, `.gradle`, `bin/obj` | Developer build output & dependencies | ✅ Yes. They are recreated on the next build/install. |
-| Package caches (`uv`, `pip`, `npm`, `NuGet`, `Gradle`) | Downloaded package caches | ✅ Use the tool's clean command (`uv cache clean`, `npm cache clean --force`, …). |
-| `AppData\Local\Temp`, crash dumps (`*.dmp`) | Temporary files | ✅ Yes. |
-| `C:\Windows\WinSxS`, `Program Files` | Windows components & installed apps | ❌ Use *Settings → Apps* or *Disk Cleanup*, not manual deletion. |
+| `pagefile.sys`, `hiberfil.sys` | Virtual memory and hibernation files | Do not delete. Resize the page file in System Properties, or run `powercfg /h off` to disable hibernation. |
+| `*.vhdx` (WSL, Docker, Hyper-V, emulators) | Virtual machine disk images | Remove through the owning tool, for example `wsl --unregister` or Docker's data purge. |
+| Downloads (`*.iso`, `*.zip`, installers) | Archives and installers | Generally safe to remove. |
+| `node_modules`, `target`, `bin`, `obj`, `.gradle` | Build output and dependencies | Safe to remove; regenerated on the next build. |
+| Package caches (uv, pip, npm, NuGet, Gradle) | Downloaded package caches | Clear with the tool's own command, for example `uv cache clean` or `npm cache clean --force`. |
+| `AppData\Local\Temp`, `*.dmp` | Temporary files and crash dumps | Safe to remove. |
+| `C:\Windows`, `Program Files` | Operating system and installed applications | Do not delete manually. Use Settings > Apps or Disk Cleanup. |
 
-## ❓ FAQ
+## Technical notes
 
-**Is SpaceScout free?**
-Yes, free and open source under the MIT license. No ads, no "pro" version.
+- **Sizes** are logical file sizes, not allocated size on disk.
+- **Hard links** (for example in `C:\Windows\WinSxS`) are counted once per link, so system folders
+  may appear larger than their actual footprint.
+- **Symbolic links and junctions** are not followed, preventing double counting and traversal loops.
+- **Memory usage** is approximately 60–80 bytes per scanned entry; a 4.3-million-entry drive
+  requires roughly 400 MB while displayed.
 
-**How is it different from WinDirStat, WizTree or TreeSize?**
-It's a lightweight, open-source alternative in the same family: a portable single exe written in Rust,
-with a parallel scanner, a drill-down tree and top-files lists, and Recycle Bin / permanent delete built in.
-If you just want to know *what's taking up space* and remove it, SpaceScout keeps that to one screen.
+### Architecture
 
-**Does it work on external drives, USB sticks and network shares?**
-Yes. Any drive letter or folder path you can open in Explorer.
+- **Scanner:** a parallel directory walk built on [rayon](https://github.com/rayon-rs/rayon). File
+  sizes are read from the Win32 directory enumeration itself, avoiding a separate metadata call per file.
+- **Data model:** results are flattened into a contiguous arena of 32-byte nodes with a shared
+  string pool for names.
+- **User interface:** built with [egui](https://github.com/emilk/egui) and virtualised, so only
+  visible rows are laid out and directories with hundreds of thousands of entries remain responsive.
 
-**Why does the Windows folder look bigger than expected?**
-SpaceScout reports file sizes (not "size on disk"), and NTFS hard links such as those in
-`C:\Windows\WinSxS` are counted once per link. Leave Windows folders to *Disk Cleanup*.
+## Building from source
 
-**Does it follow symbolic links or junctions?**
-No. Symlinks and junctions are skipped, so nothing is counted twice and scans can't loop.
+Prerequisites: [Rust](https://rustup.rs/) stable with the MSVC toolchain.
 
-**How much memory does it use?**
-Roughly 60–80 bytes per file or folder scanned. A full 4.3-million-file system drive stays around
-400 MB while displayed; a typical project or Downloads folder needs only a few dozen MB.
-
-**Is deleting safe?**
-*Move to Recycle Bin* is fully undoable. *Delete permanently* asks for confirmation and warns when
-system paths are selected. You're always shown exactly what will be removed first.
-
-## 🛠 Build from source
-
-Requires [Rust](https://rustup.rs/) (stable, MSVC toolchain).
-
-```powershell
+```
 git clone https://github.com/tamersherif00/SpaceScout.git
 cd SpaceScout
-cargo build --release          # -> target\release\spacescout.exe
 cargo test --release
+cargo build --release
 ```
 
-Command line:
+The executable is written to `target\release\spacescout.exe`. Continuous integration builds and
+tests every push; tagged versions (`v*`) publish the executable to GitHub Releases automatically.
 
-```powershell
-spacescout.exe "D:\Some Folder"     # open and start scanning a path immediately
-spacescout.exe --bench C:\          # headless scan: prints file count, total size, time, top files
-```
+## Roadmap
 
-**How it works:** a work-stealing parallel directory walk ([rayon](https://github.com/rayon-rs/rayon))
-over the Win32 directory listing (file sizes come straight from the listing, with no per-file
-`stat` call), flattened into a compact 32-byte-per-entry arena with a shared name pool.
-The UI is [egui](https://github.com/emilk/egui) and only renders the rows on screen, so even folders with
-hundreds of thousands of entries scroll smoothly.
+- Treemap visualisation
+- Breakdown by file type
+- Duplicate file detection
+- CSV export
+- Code-signed releases
 
-## 🤝 Contributing
+## Contributing
 
-Issues and pull requests are welcome! Ideas on the roadmap:
+Issues and pull requests are welcome. Please open an issue to discuss significant changes before
+submitting a pull request.
 
-- [ ] Treemap view
-- [ ] File-type breakdown (videos, archives, images…)
-- [ ] Duplicate file finder
-- [ ] Export results to CSV
-- [ ] Code-signed releases
+## License
 
-If SpaceScout helped you reclaim some space, **please ⭐ star the repo**. It helps others find it.
-
-## 📄 License
-
-[MIT](LICENSE) © Tamer Sherif
-
----
-
-<sub>Keywords: disk space analyzer · disk usage analyzer · what is taking up space on my C drive · find large files Windows 11 · free up disk space Windows 10 · folder size viewer · WinDirStat alternative · WizTree alternative · TreeSize alternative · SpaceSniffer alternative · storage analyzer · disk cleanup tool · portable · open source</sub>
+Released under the [MIT License](LICENSE). Copyright (c) 2026 Tamer Sherif.
