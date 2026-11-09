@@ -1,6 +1,6 @@
 [package]
 name = "spacescout"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Fast, lightweight multi-threaded disk space analyzer for Windows: find and delete the biggest files and folders"
 license = "MIT"

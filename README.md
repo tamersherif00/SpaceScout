@@ -3,7 +3,6 @@
 **Disk space analyzer for Windows 10 and 11.** SpaceScout identifies the files and folders consuming
 storage on any drive and lets you remove them directly from the results.
 
-[![Build](https://github.com/tamersherif00/SpaceScout/actions/workflows/build.yml/badge.svg)](https://github.com/tamersherif00/SpaceScout/actions/workflows/build.yml)
 [![Release](https://img.shields.io/github/v/release/tamersherif00/SpaceScout)](https://github.com/tamersherif00/SpaceScout/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-lightgrey)
@@ -108,8 +107,7 @@ cargo test --release
 cargo build --release
 ```
 
-The executable is written to `target\release\spacescout.exe`. Continuous integration builds and
-tests every push; tagged versions (`v*`) publish the executable to GitHub Releases automatically.
+The executable is written to `target\release\spacescout.exe`.
 
 ## Roadmap
 
