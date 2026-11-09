@@ -2,7 +2,12 @@
 name = "spacescout"
 version = "0.1.0"
 edition = "2021"
-description = "Fast multi-threaded disk space analyzer for Windows"
+description = "Fast, lightweight multi-threaded disk space analyzer for Windows: find and delete the biggest files and folders"
+license = "MIT"
+repository = "https://github.com/tamersherif00/SpaceScout"
+readme = "README.md"
+keywords = ["disk-usage", "disk-space", "windows", "analyzer", "cleanup"]
+categories = ["filesystem", "command-line-utilities"]
 
 [dependencies]
 eframe = "0.31"

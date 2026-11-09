@@ -549,7 +549,7 @@ impl App {
             + ui.spacing().scroll.bar_width
             + 8.0;
         let name_w = (ui.available_width() - fixed_cols).max(220.0);
-        header(ui, if self.tab == Tab::Tree { "Name" } else { "Path" }, name_w);
+        header(ui, if self.tab == Tab::Tree { ("Name", "% parent") } else { ("Path", "% total") }, name_w);
 
         let t = self.tree.as_ref().unwrap();
         let spacing = ui.spacing().item_spacing.y;
@@ -638,6 +638,23 @@ impl App {
             ctx.send_viewport_cmd(egui::ViewportCommand::Close);
         } else if self.tree.is_some() && self.scan.is_none() {
             self.shot_frames += 1;
+            if self.shot_frames == 1 {
+                // Optional: SPACESCOUT_SHOT_TAB=files|folders, SPACESCOUT_SHOT_DEPTH=<n> (expand all folders to depth n)
+                match std::env::var("SPACESCOUT_SHOT_TAB").as_deref() {
+                    Ok("files") => self.tab = Tab::Files,
+                    Ok("folders") => self.tab = Tab::Folders,
+                    _ => {}
+                }
+                if let (Ok(d), Some(t)) = (std::env::var("SPACESCOUT_SHOT_DEPTH"), &self.tree) {
+                    let max: usize = d.parse().unwrap_or(0);
+                    for i in 0..t.nodes.len() as u32 {
+                        if t.node(i).is_dir && t.ancestors(i).count() < max {
+                            self.expanded.insert(i);
+                        }
+                    }
+                    self.visible_dirty = true;
+                }
+            }
             if self.shot_frames == 5 {
                 ctx.send_viewport_cmd(egui::ViewportCommand::Screenshot(Default::default()));
             }
@@ -707,13 +724,13 @@ fn usage_color(frac: f32) -> Color32 {
     }
 }
 
-fn header(ui: &mut egui::Ui, name: &str, name_w: f32) {
+fn header(ui: &mut egui::Ui, (name, pct): (&str, &str), name_w: f32) {
     ui.horizontal(|ui| {
         ui.add_space(ui.spacing().interact_size.y + ui.spacing().item_spacing.x);
         fixed(ui, name_w, RichText::new(name).strong(), false);
         fixed(ui, W_BAR, RichText::new("Share").strong(), false);
         fixed(ui, W_SIZE, RichText::new("Size").strong(), true);
-        fixed(ui, W_PCT, RichText::new("% parent").strong(), true);
+        fixed(ui, W_PCT, RichText::new(pct).strong(), true);
         fixed(ui, W_FILES, RichText::new("Files").strong(), true);
     });
 }
@@ -738,7 +755,7 @@ fn draw_row(ui: &mut egui::Ui, t: &Tree, i: u32, row: RowCtx, actions: &mut Vec<
     // Row background (zebra stripe / hover / selected), painted before the content.
     let row_rect = egui::Rect::from_min_size(ui.cursor().min, Vec2::new(ui.available_width(), ROW_H))
         .expand2(Vec2::new(0.0, spacing_y * 0.5));
-    if ui.rect_contains_pointer(row_rect) {
+    if std::env::var_os("SPACESCOUT_SHOT").is_none() && ui.rect_contains_pointer(row_rect) {
         ui.painter().rect_filled(row_rect, 2.0, ui.visuals().widgets.hovered.weak_bg_fill);
     } else if row.n % 2 == 1 {
         ui.painter().rect_filled(row_rect, 0.0, ui.visuals().faint_bg_color);
