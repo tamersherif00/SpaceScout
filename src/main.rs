@@ -12,7 +12,8 @@ fn main() -> eframe::Result<()> {
 
     // Headless benchmark: spacescout.exe --bench <path>
     if args.first().map(String::as_str) == Some("--bench") {
-        let path = std::path::PathBuf::from(args.get(1).cloned().unwrap_or_else(|| "C:\\".into()));
+        let rest = args[1..].join(" ");
+        let path = std::path::PathBuf::from(if rest.is_empty() { "C:\\".to_string() } else { rest });
         let progress = scan::Progress::default();
         let t = scan::run(path, &progress);
         println!(
